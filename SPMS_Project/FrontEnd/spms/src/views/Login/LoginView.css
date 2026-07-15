@@ -1,0 +1,344 @@
+.login-page-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100vw;
+  background: radial-gradient(circle at top right, #e0e7ff, #f0f4f9 60%);
+  padding: 20px;
+  overflow: hidden;
+}
+
+.login-card-wrapper {
+  display: flex;
+  width: 860px;
+  min-height: 520px;
+  background-color: var(--bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.12), 0 0 0 1px rgba(15, 23, 42, 0.04);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+/* Left Hero Panel */
+.login-hero-panel {
+  flex: 1.1;
+  background-color: var(--bg-sidebar);
+  background-image: radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 60%);
+  padding: 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: #ffffff;
+  position: relative;
+}
+
+.hero-logo-circle {
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, var(--color-primary), #818cf8);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 28px;
+  box-shadow: 0 8px 16px rgba(99, 102, 241, 0.25);
+}
+
+.hero-logo-icon {
+  width: 32px;
+  height: 32px;
+  color: #ffffff;
+}
+
+.hero-brand-name {
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-bottom: 12px;
+}
+
+.hero-brand-tagline {
+  font-size: 1.05rem;
+  color: #94a3b8;
+  font-weight: 400;
+  max-width: 260px;
+}
+
+.hero-decoration-grid {
+  position: absolute;
+  bottom: 40px;
+  left: 48px;
+  display: flex;
+  gap: 8px;
+}
+
+.dec-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.dec-dot:nth-child(2) {
+  background-color: rgba(99, 102, 241, 0.3);
+}
+
+/* Right Input Form Panel */
+.login-form-panel {
+  flex: 1.2;
+  padding: 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: #ffffff;
+}
+
+.form-header {
+  margin-bottom: 32px;
+}
+
+.form-header h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.form-header p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.login-error-alert {
+  background-color: var(--color-rejected-bg);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: var(--color-rejected);
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.alert-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.forgot-link {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: var(--transition-smooth);
+}
+
+.forgot-link:hover {
+  color: var(--color-primary-hover);
+  text-decoration: underline;
+}
+
+.input-with-icon {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.input-icon {
+  position: absolute;
+  left: 14px;
+  width: 20px;
+  height: 20px;
+  color: var(--text-muted);
+}
+
+.input-with-icon input {
+  width: 100%;
+  padding: 12px 16px 12px 46px;
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  outline: none;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  transition: var(--transition-smooth);
+}
+
+.input-with-icon input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3.5px rgba(99, 102, 241, 0.1);
+}
+
+.login-submit-btn {
+  background-color: var(--color-primary);
+  color: #ffffff;
+  border: none;
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+  transition: var(--transition-smooth);
+  margin-top: 8px;
+}
+
+.login-submit-btn:hover {
+  background-color: var(--color-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.25);
+}
+
+.login-submit-btn:disabled {
+  background-color: var(--text-muted);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.btn-arrow {
+  width: 18px;
+  height: 18px;
+  transition: var(--transition-smooth);
+}
+
+.login-submit-btn:hover .btn-arrow {
+  transform: translateX(3px);
+}
+
+.btn-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+/* Quick Login Dev Panel */
+.quick-login-section {
+  margin-top: 36px;
+  border-top: 1px solid var(--border-color);
+  padding-top: 24px;
+}
+
+.quick-login-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 12px;
+}
+
+.quick-login-pills {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.quick-pill {
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: var(--transition-smooth);
+  display: flex;
+  align-items: center;
+}
+
+.admin-pill {
+  background-color: rgba(99, 102, 241, 0.08);
+  color: var(--color-primary);
+  border-color: rgba(99, 102, 241, 0.15);
+}
+.admin-pill:hover {
+  background-color: var(--color-primary);
+  color: #ffffff;
+}
+
+.faculty-pill {
+  background-color: rgba(59, 130, 246, 0.08);
+  color: #2563eb;
+  border-color: rgba(59, 130, 246, 0.15);
+}
+.faculty-pill:hover {
+  background-color: #2563eb;
+  color: #ffffff;
+}
+
+.student-pill {
+  background-color: rgba(16, 185, 129, 0.08);
+  color: #059669;
+  border-color: rgba(16, 185, 129, 0.15);
+}
+.student-pill:hover {
+  background-color: #059669;
+  color: #ffffff;
+}
+
+@media (max-width: 768px) {
+  .login-card-wrapper {
+    flex-direction: column;
+    width: 100%;
+    max-width: 440px;
+    min-height: auto;
+  }
+  
+  .login-hero-panel {
+    padding: 32px;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .hero-logo-circle {
+    margin-bottom: 16px;
+  }
+  
+  .hero-brand-tagline {
+    max-width: 100%;
+  }
+  
+  .hero-decoration-grid {
+    display: none;
+  }
+  
+  .login-form-panel {
+    padding: 32px;
+  }
+}
