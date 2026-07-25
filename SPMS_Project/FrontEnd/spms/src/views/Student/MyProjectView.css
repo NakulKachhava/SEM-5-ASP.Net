@@ -1,0 +1,266 @@
+/* MyProjectView.css */
+
+/* ── Banner ────────────────────────────────────── */
+.myproject-banner {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+  padding: 28px 28px;
+  margin-bottom: 28px;
+}
+
+.mpb-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.mpb-tag {
+  font-size: 0.73rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-primary);
+  background: var(--color-primary-light);
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  width: fit-content;
+}
+
+.mpb-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.mpb-desc {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  max-width: 520px;
+}
+
+.mpb-meta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 4px;
+}
+
+.mpb-meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mpb-meta-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.mpb-meta-value {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 0.92rem;
+}
+
+/* ── Right gauge ──────────────────────────────── */
+.mpb-right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+.mpb-gauge {
+  position: relative;
+  width: 130px;
+  height: 130px;
+}
+
+.gauge-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.mpb-gauge-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.mpb-gauge-pct {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.mpb-gauge-sub {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.mpb-task-summary {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 10px 16px;
+}
+
+.mpb-ts-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.mpb-ts-val {
+  font-size: 1.1rem;
+  font-weight: 900;
+}
+
+.mpb-ts-label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.mpb-ts-divider {
+  width: 1px;
+  height: 28px;
+  background: var(--border-color);
+}
+
+/* ── Section Title ────────────────────────────── */
+.myproject-section-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.myproject-section-title h3 {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+/* ── Timeline ─────────────────────────────────── */
+.timeline-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.timeline-item {
+  display: flex;
+  gap: 20px;
+  position: relative;
+}
+
+.timeline-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2.5px solid var(--border-color);
+  background: var(--bg-card);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  margin-top: 16px;
+}
+
+.dot-done {
+  border-color: #10b981;
+  background: #10b981;
+  color: #fff;
+}
+
+.dot-active {
+  border-color: var(--color-primary);
+  background: var(--color-primary-light);
+}
+
+.dot-pending {
+  border-color: var(--border-color);
+  background: var(--bg-primary);
+}
+
+.timeline-line {
+  position: absolute;
+  left: 13px;
+  top: 44px;
+  width: 2px;
+  bottom: -20px;
+  z-index: 0;
+}
+
+.line-done {
+  background: #10b981;
+}
+
+.line-pending {
+  background: var(--border-color);
+  background-image: repeating-linear-gradient(
+    180deg,
+    var(--border-color) 0,
+    var(--border-color) 6px,
+    transparent 6px,
+    transparent 12px
+  );
+  background-color: transparent;
+}
+
+.timeline-card {
+  flex: 1;
+  margin-bottom: 16px;
+  padding: 16px 20px;
+}
+
+.tc-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.tc-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-top: 2px;
+}
+
+.tc-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+  margin-bottom: 10px;
+}
+
+.tc-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}

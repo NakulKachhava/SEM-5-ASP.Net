@@ -1,0 +1,39 @@
+.perm-matrix-card {
+  overflow: hidden;
+}
+
+.perm-matrix-header {
+  padding: 0 0 20px 0;
+}
+
+.perm-note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  background: var(--color-primary-light);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+}
+
+.perm-module-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.perm-module-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
