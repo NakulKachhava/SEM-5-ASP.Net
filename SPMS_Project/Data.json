@@ -1,0 +1,387 @@
+{
+  "SPM_Role": [
+    {
+      "RoleName": "Admin",
+      "Description": "Full access to all modules and settings."
+    },
+    {
+      "RoleName": "Faculty",
+      "Description": "Can supervise students and manage project assignments."
+    },
+    {
+      "RoleName": "Student",
+      "Description": "Can view and manage own projects and tasks."
+    }
+  ],
+  "SPM_UserType": [
+    {
+      "UserTypeName": "Admin",
+      "Description": "System administrators."
+    },
+    {
+      "UserTypeName": "Faculty",
+      "Description": "Faculty supervisors."
+    },
+    {
+      "UserTypeName": "Student",
+      "Description": "Enrolled students."
+    }
+  ],
+  "SPM_User": [
+    {
+      "UserTypeID": 1,
+      "FullName": "Aarav Patel",
+      "UserCode": "ADM001",
+      "Email": "admin@spms.com",
+      "Password": "admin123",
+      "MobileNumber": "9876543210",
+      "ProfilePicturePath": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=200",
+      "IsActive": true,
+      "IsDeleted": false
+    },
+    {
+      "UserTypeID": 2,
+      "FullName": "Priya Sharma",
+      "UserCode": "FAC001",
+      "Email": "priya.sharma@spms.com",
+      "Password": "faculty123",
+      "MobileNumber": "9876543211",
+      "ProfilePicturePath": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=200",
+      "IsActive": true,
+      "IsDeleted": false
+    },
+    {
+      "UserTypeID": 2,
+      "FullName": "Dr. Nisha Kapoor",
+      "UserCode": "FAC002",
+      "Email": "nisha.kapoor@spms.com",
+      "Password": "faculty123",
+      "MobileNumber": "9876543212",
+      "ProfilePicturePath": "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=200",
+      "IsActive": true,
+      "IsDeleted": false
+    },
+    {
+      "UserTypeID": 3,
+      "FullName": "Rohan Mehta",
+      "UserCode": "STU001",
+      "Email": "rohan.mehta@spms.com",
+      "Password": "student123",
+      "MobileNumber": "9876543213",
+      "ProfilePicturePath": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200",
+      "IsActive": true,
+      "IsDeleted": false
+    },
+    {
+      "UserTypeID": 3,
+      "FullName": "Sneha Desai",
+      "UserCode": "STU002",
+      "Email": "sneha.desai@spms.com",
+      "Password": "student123",
+      "MobileNumber": "9876543214",
+      "ProfilePicturePath": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=200",
+      "IsActive": true,
+      "IsDeleted": false
+    },
+    {
+      "UserTypeID": 3,
+      "FullName": "Vikram Singh",
+      "UserCode": "STU003",
+      "Email": "vikram.singh@spms.com",
+      "Password": "student123",
+      "MobileNumber": "9876543215",
+      "ProfilePicturePath": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200",
+      "IsActive": true,
+      "IsDeleted": false
+    },
+    {
+      "UserTypeID": 3,
+      "FullName": "Anita Joshi",
+      "UserCode": "STU004",
+      "Email": "anita.joshi@spms.com",
+      "Password": "student123",
+      "MobileNumber": "9876543216",
+      "ProfilePicturePath": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=200",
+      "IsActive": true,
+      "IsDeleted": false
+    }
+  ],
+  "SPM_UserRole": [
+    { "RoleID": 1, "UserID": 1 },
+    { "RoleID": 2, "UserID": 2 },
+    { "RoleID": 2, "UserID": 3 },
+    { "RoleID": 3, "UserID": 4 },
+    { "RoleID": 3, "UserID": 5 },
+    { "RoleID": 3, "UserID": 6 },
+    { "RoleID": 3, "UserID": 7 }
+  ],
+  "SPM_TaskStatus": [
+    { "TaskStatusName": "Pending", "TaskStatusCssClass": "status-pending" },
+    { "TaskStatusName": "In Progress", "TaskStatusCssClass": "status-inprogress" },
+    { "TaskStatusName": "Completed", "TaskStatusCssClass": "status-completed" },
+    { "TaskStatusName": "Rejected", "TaskStatusCssClass": "status-rejected" }
+  ],
+  "SPM_TaskPriority": [
+    { "TaskPriorityName": "Low", "TaskPriortyCssClass": "priority-low" },
+    { "TaskPriorityName": "Medium", "TaskPriortyCssClass": "priority-medium" },
+    { "TaskPriorityName": "High", "TaskPriortyCssClass": "priority-high" },
+    { "TaskPriorityName": "Critical", "TaskPriortyCssClass": "priority-critical" }
+  ],
+  "SPM_ProjectMaster": [
+    {
+      "ProjectTitle": "E-Commerce Platform",
+      "Description": "Build a full-stack e-commerce web application with standard checkout features and shopping carts."
+    },
+    {
+      "ProjectTitle": "Library Management System",
+      "Description": "Develop a library inventory and reservation management platform with QR code integration."
+    },
+    {
+      "ProjectTitle": "AI Chatbot",
+      "Description": "Create a local AI-powered chatbot interface using LLM APIs to handle customer support inquiries."
+    },
+    {
+      "ProjectTitle": "IoT Weather Station",
+      "Description": "Design an automated weather tracking device reporting temperature, humidity, and barometric pressure."
+    }
+  ],
+  "SPM_ProjectAllocation": [
+    {
+      "ProjectID": 1,
+      "StudentID": 4,
+      "FacultyID": 2,
+      "AssignedDate": "2026-06-25T10:00:00",
+      "ProjectStartDate": "2026-07-01",
+      "ProjectEndDate": "2026-11-30",
+      "TotalTasksGiven": 5,
+      "TotalCompletedTasks": 2,
+      "ProgressPercentage": 40.00,
+      "OverAllGrade": null
+    },
+    {
+      "ProjectID": 2,
+      "StudentID": 5,
+      "FacultyID": 3,
+      "AssignedDate": "2026-06-28T09:30:00",
+      "ProjectStartDate": "2026-07-01",
+      "ProjectEndDate": "2026-10-15",
+      "TotalTasksGiven": 4,
+      "TotalCompletedTasks": 4,
+      "ProgressPercentage": 100.00,
+      "OverAllGrade": "A"
+    },
+    {
+      "ProjectID": 3,
+      "StudentID": 6,
+      "FacultyID": 2,
+      "AssignedDate": "2026-07-02T11:00:00",
+      "ProjectStartDate": "2026-07-05",
+      "ProjectEndDate": "2026-12-15",
+      "TotalTasksGiven": 6,
+      "TotalCompletedTasks": 1,
+      "ProgressPercentage": 16.67,
+      "OverAllGrade": null
+    },
+    {
+      "ProjectID": 4,
+      "StudentID": 7,
+      "FacultyID": 3,
+      "AssignedDate": "2026-07-03T14:00:00",
+      "ProjectStartDate": "2026-07-15",
+      "ProjectEndDate": "2027-01-30",
+      "TotalTasksGiven": 3,
+      "TotalCompletedTasks": 0,
+      "ProgressPercentage": 0.00,
+      "OverAllGrade": null
+    }
+  ],
+  "SPM_Task": [
+    {
+      "ProjectAllocationID": 1,
+      "TaskTitle": "Design Database Schema",
+      "TaskDescription": "Draft relational tables and diagrams representing product catalog, orders, and user carts.",
+      "TaskStatusID": 3,
+      "TaskPriorityID": 3,
+      "AssignedScore": 10.00,
+      "EarnedScore": 9.50,
+      "ProgressPercentage": 100.00,
+      "TaskAssignedDate": "2026-06-26",
+      "TaskStartDate": "2026-07-01",
+      "TaskDueDate": "2026-07-07",
+      "TaskCompletedDate": "2026-07-06",
+      "NextFollowUpDate": "2026-07-08",
+      "FacultyRemarks": "Excellent work structure, highly normalized.",
+      "StudentRemarks": "Followed week 1 project outline guidelines."
+    },
+    {
+      "ProjectAllocationID": 1,
+      "TaskTitle": "Setup React Project & Router",
+      "TaskDescription": "Initialize React SPA structure and install necessary navigation and layout containers.",
+      "TaskStatusID": 3,
+      "TaskPriorityID": 2,
+      "AssignedScore": 10.00,
+      "EarnedScore": 9.00,
+      "ProgressPercentage": 100.00,
+      "TaskAssignedDate": "2026-07-05",
+      "TaskStartDate": "2026-07-08",
+      "TaskDueDate": "2026-07-14",
+      "TaskCompletedDate": "2026-07-12",
+      "NextFollowUpDate": "2026-07-15",
+      "FacultyRemarks": "Slightly slow performance in CSS rendering, but structure looks great.",
+      "StudentRemarks": "Successfully completed baseline template layout."
+    },
+    {
+      "ProjectAllocationID": 1,
+      "TaskTitle": "Implement ASP.NET API Controllers",
+      "TaskDescription": "Write initial authentication and project allocation controllers using Entity Framework Core.",
+      "TaskStatusID": 2,
+      "TaskPriorityID": 4,
+      "AssignedScore": 15.00,
+      "EarnedScore": null,
+      "ProgressPercentage": 40.00,
+      "TaskAssignedDate": "2026-07-13",
+      "TaskStartDate": "2026-07-15",
+      "TaskDueDate": "2026-07-28",
+      "TaskCompletedDate": null,
+      "NextFollowUpDate": "2026-07-22",
+      "FacultyRemarks": null,
+      "StudentRemarks": "Currently working on CORS policy adjustments and database context connection."
+    },
+    {
+      "ProjectAllocationID": 1,
+      "TaskTitle": "Integrate FrontEnd layout with API",
+      "TaskDescription": "Consume authentication and profile services from the Web API endpoints.",
+      "TaskStatusID": 1,
+      "TaskPriorityID": 3,
+      "AssignedScore": 15.00,
+      "EarnedScore": null,
+      "ProgressPercentage": 0.00,
+      "TaskAssignedDate": "2026-07-25",
+      "TaskStartDate": "2026-07-29",
+      "TaskDueDate": "2026-08-10",
+      "TaskCompletedDate": null,
+      "NextFollowUpDate": "2026-08-01",
+      "FacultyRemarks": null,
+      "StudentRemarks": null
+    },
+    {
+      "ProjectAllocationID": 1,
+      "TaskTitle": "Implement Payment Gateway Mock",
+      "TaskDescription": "Mock check-out pipeline integrating dummy responses from payment providers.",
+      "TaskStatusID": 1,
+      "TaskPriorityID": 1,
+      "AssignedScore": 10.00,
+      "EarnedScore": null,
+      "ProgressPercentage": 0.00,
+      "TaskAssignedDate": "2026-08-05",
+      "TaskStartDate": "2026-08-11",
+      "TaskDueDate": "2026-08-20",
+      "TaskCompletedDate": null,
+      "NextFollowUpDate": "2026-08-15",
+      "FacultyRemarks": null,
+      "StudentRemarks": null
+    },
+    {
+      "ProjectAllocationID": 2,
+      "TaskTitle": "Wireframe Layout & Flow",
+      "TaskDescription": "Draft screen mocks showing user search, checkout lists, and admin screens.",
+      "TaskStatusID": 3,
+      "TaskPriorityID": 2,
+      "AssignedScore": 10.00,
+      "EarnedScore": 10.00,
+      "ProgressPercentage": 100.00,
+      "TaskAssignedDate": "2026-06-29",
+      "TaskStartDate": "2026-07-01",
+      "TaskDueDate": "2026-07-05",
+      "TaskCompletedDate": "2026-07-04",
+      "NextFollowUpDate": "2026-07-05",
+      "FacultyRemarks": "Logical and intuitive flow.",
+      "StudentRemarks": "Modified design structure after supervisor comments."
+    },
+    {
+      "ProjectAllocationID": 2,
+      "TaskTitle": "Database Implementation",
+      "TaskDescription": "Initialize local SQL Server database, populate static table rows.",
+      "TaskStatusID": 3,
+      "TaskPriorityID": 3,
+      "AssignedScore": 15.00,
+      "EarnedScore": 14.50,
+      "ProgressPercentage": 100.00,
+      "TaskAssignedDate": "2026-07-03",
+      "TaskStartDate": "2026-07-06",
+      "TaskDueDate": "2026-07-15",
+      "TaskCompletedDate": "2026-07-14",
+      "NextFollowUpDate": "2026-07-10",
+      "FacultyRemarks": "Indexes applied correctly.",
+      "StudentRemarks": "Tested relationships and constraint rules."
+    },
+    {
+      "ProjectAllocationID": 2,
+      "TaskTitle": "CRUD API Endpoints",
+      "TaskDescription": "Develop REST endpoints for books, issues, and student inventory returns.",
+      "TaskStatusID": 3,
+      "TaskPriorityID": 3,
+      "AssignedScore": 20.00,
+      "EarnedScore": 19.00,
+      "ProgressPercentage": 100.00,
+      "TaskAssignedDate": "2026-07-14",
+      "TaskStartDate": "2026-07-16",
+      "TaskDueDate": "2026-08-01",
+      "TaskCompletedDate": "2026-07-30",
+      "NextFollowUpDate": "2026-07-22",
+      "FacultyRemarks": "API follows standard REST norms.",
+      "StudentRemarks": "Resolved minor issue with double-booking checkout validation."
+    },
+    {
+      "ProjectAllocationID": 2,
+      "TaskTitle": "Integrate QR Code Reader",
+      "TaskDescription": "Integrate JS libraries to enable mobile camera scanning of QR IDs on library cards.",
+      "TaskStatusID": 3,
+      "TaskPriorityID": 4,
+      "AssignedScore": 25.00,
+      "EarnedScore": 24.00,
+      "ProgressPercentage": 100.00,
+      "TaskAssignedDate": "2026-07-28",
+      "TaskStartDate": "2026-08-02",
+      "TaskDueDate": "2026-08-15",
+      "TaskCompletedDate": "2026-08-14",
+      "NextFollowUpDate": "2026-08-08",
+      "FacultyRemarks": "Fantastic scanning responsiveness.",
+      "StudentRemarks": "Ready for final project evaluation."
+    },
+    {
+      "ProjectAllocationID": 3,
+      "TaskTitle": "Setup Open Source LLM locally",
+      "TaskDescription": "Configure local server instance running small sized open source model.",
+      "TaskStatusID": 3,
+      "TaskPriorityID": 4,
+      "AssignedScore": 20.00,
+      "EarnedScore": 18.00,
+      "ProgressPercentage": 100.00,
+      "TaskAssignedDate": "2026-07-03",
+      "TaskStartDate": "2026-07-06",
+      "TaskDueDate": "2026-07-15",
+      "TaskCompletedDate": "2026-07-14",
+      "NextFollowUpDate": "2026-07-10",
+      "FacultyRemarks": "Model selected has good performance, memory trade-off is fine.",
+      "StudentRemarks": "Struggled with GPU compilation but it is resolved."
+    },
+    {
+      "ProjectAllocationID": 3,
+      "TaskTitle": "Develop Chatbot UI Component",
+      "TaskDescription": "Create custom chat bubble overlay responsive to standard dimensions.",
+      "TaskStatusID": 2,
+      "TaskPriorityID": 3,
+      "AssignedScore": 15.00,
+      "EarnedScore": null,
+      "ProgressPercentage": 50.00,
+      "TaskAssignedDate": "2026-07-12",
+      "TaskStartDate": "2026-07-16",
+      "TaskDueDate": "2026-07-30",
+      "TaskCompletedDate": null,
+      "NextFollowUpDate": "2026-07-20",
+      "FacultyRemarks": null,
+      "StudentRemarks": "Currently implementing CSS animations for loading states."
+    }
+  ]
+}
