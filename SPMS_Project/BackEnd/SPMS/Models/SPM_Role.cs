@@ -17,4 +17,5 @@ namespace SPMS.Models
 
         public virtual ICollection<SPM_UserRole> UserRoles { get; set; } = new List<SPM_UserRole>();
     }
+
 }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SPMS.Data;
+using SPMS.DTO.UserType;
 using SPMS.Models;
 
 namespace SPMS.Controllers
@@ -20,7 +21,12 @@ namespace SPMS.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUserTypes()
         {
-            var userTypes = await _context.UserTypes.ToListAsync();
+            var userTypes = await _context.UserTypes.Select(ut => new UserTypeDto
+            {
+                UserTypeID = ut.UserTypeID,
+                UserTypeName = ut.UserTypeName,
+                Description = ut.Description,
+            }).AsNoTracking().ToListAsync();
             return Ok(userTypes);
         }
 
