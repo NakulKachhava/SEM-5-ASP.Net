@@ -1,8 +1,10 @@
 
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Scalar.AspNetCore;
 using SPMS.Data;
+using SPMS.Validators;
 
 namespace SPMS
 {
@@ -36,6 +38,8 @@ namespace SPMS
             {
                 options.JsonSerializerOptions.PropertyNamingPolicy = null;
             });
+
+            builder.Services.AddValidatorsFromAssemblyContaining<RoleValidator>();
 
             var app = builder.Build();
 

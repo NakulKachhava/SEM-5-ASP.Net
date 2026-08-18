@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SPMS.Common;
 using SPMS.Data;
 using SPMS.DTO.Role;
 using SPMS.Models;
+using SPMS.Validators;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 
 namespace SPMS.Controllers
@@ -15,9 +18,12 @@ namespace SPMS.Controllers
     {
         private readonly SpmDbContext _context;
 
-        public SPM_RoleController(SpmDbContext context)
+        private readonly IValidator<RoleDto> _validator;
+
+        public SPM_RoleController(SpmDbContext context, IValidator<RoleDto> validator)
         {
             _context = context;
+            _validator = validator;
         }
 
         [HttpGet]
@@ -71,6 +77,26 @@ namespace SPMS.Controllers
         {
             try
             {
+                var result = await _validator.ValidateAsync(role);
+
+                if (!result.IsValid)
+                {
+                    return BadRequest(new ApiResponse<Object>
+                    {
+                        Success = false,
+                        Message = "Validation Failed",
+                        Data = null,
+                        Errors = result.Errors
+                        .Select(x => $"{x.PropertyName}: {x.ErrorMessage}")
+                        .ToList()
+
+                        //Errors = result.Errors
+                        //.GroupBy(x => x.PropertyName)
+                        //.Select(x => $"{x.Key}: {string.Join(", ", x.Select(e => e.ErrorMessage))}")
+                        //.ToList()
+                    });
+                }
+
                 if (role == null)
                 {
                     return BadRequest(new ApiResponse<object>
@@ -83,7 +109,6 @@ namespace SPMS.Controllers
 
                 var roles = new SPM_Role()
                 {
-                    RoleID = role.RoleID,
                     RoleName = role.RoleName,
                     Description = role.Description
                 };
@@ -118,6 +143,26 @@ namespace SPMS.Controllers
         {
             try
             {
+                var result = await _validator.ValidateAsync(role);
+
+                if (!result.IsValid)
+                {
+                    return BadRequest(new ApiResponse<Object>
+                    {
+                        Success = false,
+                        Message = "Validation Failed",
+                        Data = null,
+                        //Errors = result.Errors
+                        //.Select(x => $"{x.PropertyName}: {x.ErrorMessage}")
+                        //.ToList()
+
+                        Errors = result.Errors
+                        .GroupBy(x => x.PropertyName)
+                        .Select(x => $"{x.Key}: {string.Join(", ", x.Select(e => e.ErrorMessage))}")
+                        .ToList()
+                    });
+                }
+
                 if (id != role.RoleID)
                     return BadRequest(new ApiResponse<Object>
                     {
