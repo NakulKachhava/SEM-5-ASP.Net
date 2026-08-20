@@ -1,0 +1,7 @@
+https://github.com/sxyazi/yazi/releases
+
+Fire In PowerShell:
+
+[System.Environment]::SetEnvironmentVariable("Path", [System.Environment]::GetEnvironmentVariable("Path", "User") + ";C:\Users\student\yazi-x86_64-pc-windows-msvc", "User")
+
+Then Don't Forget to close the powershell and reopen a new command prompt
