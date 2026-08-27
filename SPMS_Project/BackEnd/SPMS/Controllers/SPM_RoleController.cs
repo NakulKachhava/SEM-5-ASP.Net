@@ -1,13 +1,10 @@
 ﻿using FluentValidation;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SPMS.Common;
 using SPMS.Data;
 using SPMS.DTO.Role;
 using SPMS.Models;
-using SPMS.Validators;
-using System.ComponentModel.DataAnnotations;
 using System.Data;
 
 namespace SPMS.Controllers
@@ -42,8 +39,8 @@ namespace SPMS.Controllers
             });
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetRole(int id)
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetRole([FromRoute] int id)
         {
             var role = await _context.Roles.FindAsync(id);
 
@@ -73,7 +70,7 @@ namespace SPMS.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(RoleDto role)
+        public async Task<IActionResult> Create([FromBody] RoleDto role)
         {
             try
             {
@@ -86,14 +83,14 @@ namespace SPMS.Controllers
                         Success = false,
                         Message = "Validation Failed",
                         Data = null,
-                        Errors = result.Errors
-                        .Select(x => $"{x.PropertyName}: {x.ErrorMessage}")
-                        .ToList()
-
                         //Errors = result.Errors
-                        //.GroupBy(x => x.PropertyName)
-                        //.Select(x => $"{x.Key}: {string.Join(", ", x.Select(e => e.ErrorMessage))}")
+                        //.Select(x => $"{x.PropertyName}: {x.ErrorMessage}")
                         //.ToList()
+
+                        Errors = result.Errors
+                        .GroupBy(x => x.PropertyName)
+                        .Select(x => $"{x.Key}: {string.Join(", ", x.Select(e => e.ErrorMessage))}")
+                        .ToList()
                     });
                 }
 
@@ -138,8 +135,8 @@ namespace SPMS.Controllers
             }
         }
         
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, RoleDto role)
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Update([FromRoute] int id,[FromBody] RoleDto role)
         {
             try
             {
@@ -150,7 +147,7 @@ namespace SPMS.Controllers
                     return BadRequest(new ApiResponse<Object>
                     {
                         Success = false,
-                        Message = "Validation Failed",
+                        Message = "Validation Failed.",
                         Data = null,
                         //Errors = result.Errors
                         //.Select(x => $"{x.PropertyName}: {x.ErrorMessage}")
@@ -160,6 +157,7 @@ namespace SPMS.Controllers
                         .GroupBy(x => x.PropertyName)
                         .Select(x => $"{x.Key}: {string.Join(", ", x.Select(e => e.ErrorMessage))}")
                         .ToList()
+
                     });
                 }
 
@@ -207,8 +205,8 @@ namespace SPMS.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete([FromRoute] int id)
         {
             try
             {

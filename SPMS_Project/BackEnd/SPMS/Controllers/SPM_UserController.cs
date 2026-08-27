@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SPMS.Common;
 using SPMS.Data;
-using SPMS.DTO.Role;
 using SPMS.DTO.User;
 using SPMS.Models;
 using System.Data;
@@ -46,8 +45,8 @@ namespace SPMS.Controllers
             });
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetUser(int id)
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetUser([FromRoute] int id)
         {
             var user = await _context.Users.FindAsync(id);
 
@@ -84,7 +83,7 @@ namespace SPMS.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(UserDto user)
+        public async Task<IActionResult> Create([FromBody] UserDto user)
         {
             try
             {
@@ -100,7 +99,6 @@ namespace SPMS.Controllers
 
                 var users = new SPM_User
                 {
-                    UserID = user.UserID,
                     UserTypeID = user.UserTypeID,
                     FullName = user.FullName,
                     UserCode = user.UserCode,
@@ -137,8 +135,8 @@ namespace SPMS.Controllers
             }
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, UserDto user)
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Update([FromRoute] int id,[FromBody] UserDto user)
         {
             try
             {
@@ -193,8 +191,8 @@ namespace SPMS.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete([FromRoute] int id)
         {
             try
             {
