@@ -1,25 +1,79 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SPMS.Common;
 using SPMS.Data;
 using SPMS.DTO.User;
 using SPMS.Models;
+using SPMS.Services;
 using System.Data;
 
 namespace SPMS.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
+    [Authorize]
     public class SPM_UserController : ControllerBase
     {
         private readonly SpmDbContext _context;
+        private readonly FileService _fileService;
+        private readonly TokenService _tokenService;
 
-        public SPM_UserController(SpmDbContext context)
+        public SPM_UserController(SpmDbContext context, TokenService tokenService, FileService fileService)
         {
             _context = context;
+            _fileService = fileService;
+            _tokenService = tokenService;
         }
 
+        [AllowAnonymous]
+        [HttpPost()]
+        public async Task<IActionResult> Login([FromBody] UserLoginDto dto)
+        {
+            try
+            {
+                var user = await _context.Users.SingleOrDefaultAsync(u => u.Email == dto.Email && u.Password == dto.Password);
+
+                if (user == null)
+                {
+                    return Unauthorized("Invalid Email or password");
+                }
+
+                var token = _tokenService.GenerateToken(user);
+
+                //var loginResult = new LoginResponseDto
+                //{
+                //    Token = token,
+                //    ExpiresAt = DateTime.UtcNow.AddHours(2),
+                //    UserCode = user.UserCode,
+                //    UserType = "Admin"
+                //};
+
+                return Ok(new ApiResponse<string>
+                {
+                    Success = true,
+                    Message = "User Logged In Successfully.",
+                    Data = token, // loginResult
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse<Object>
+                {
+                    Success = false,
+                    Message = "Error occurred while logging in the user.",
+                    Errors = new List<string>
+                    {
+                        ex.Message,
+                        ex.InnerException?.Message ?? "No Inner Exception"
+                    }
+                });
+            }
+        }
+
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetUsers()
         {
@@ -82,6 +136,7 @@ namespace SPMS.Controllers
             });
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] UserDto user)
         {
@@ -224,6 +279,91 @@ namespace SPMS.Controllers
                     Errors = new List<string> { ex.Message }
                 });
             }
+        }
+
+        [HttpPost]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> CreateFile([FromForm] UserDTO dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            string? uploadedPath = null;
+            if (dto.DocumentFile != null)
+            {
+                uploadedPath = await _fileService.UploadFileAsync(dto.DocumentFile, "Users");
+            }
+
+            var user = new SPM_User
+            {
+                FullName = dto.UserName,
+                Password = dto.Password,
+                DocumentPath = uploadedPath // Save relative path to DB
+            };
+
+            await _context.Users.AddAsync(user);
+            await _context.SaveChangesAsync();
+
+            return Ok(user);
+        }
+
+        [HttpPut("{id:int}")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> UpdateFile(int id, [FromForm] UserDTO dto)
+        {
+            if (id != dto.UserId)
+                return BadRequest("ID mismatch.");
+
+            var existingUser = await _context.Users.FindAsync(id);
+            if (existingUser == null)
+                return NotFound("User not found.");
+
+            if (dto.DocumentFile != null && dto.DocumentFile.Length > 0)
+            {
+                // 1. Delete physical file on disk
+                _fileService.DeleteFile(existingUser.DocumentPath);
+
+                // 2. Upload replacement file and update path
+                existingUser.DocumentPath = await _fileService.UploadFileAsync(dto.DocumentFile, "Users");
+            }
+
+            existingUser.FullName = dto.UserName;
+            if (!string.IsNullOrWhiteSpace(dto.Password))
+            {
+                existingUser.Password = dto.Password;
+            }
+
+            _context.Users.Update(existingUser);
+            await _context.SaveChangesAsync();
+
+            return Ok(existingUser);
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> DeleteFile(int id, [FromQuery] bool deleteFileOnly = false)
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
+                return NotFound("User not found.");
+
+            if (deleteFileOnly)
+            {
+                if (string.IsNullOrEmpty(user.DocumentPath))
+                    return BadRequest("No document exists for this user.");
+
+                _fileService.DeleteFile(user.DocumentPath);
+                user.DocumentPath = null;
+                await _context.SaveChangesAsync();
+
+                return Ok("Document deleted successfully.");
+            }
+
+            // Delete both physical file and DB record
+            _fileService.DeleteFile(user.DocumentPath);
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
     }
 }

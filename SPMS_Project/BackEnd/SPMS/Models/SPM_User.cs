@@ -33,6 +33,8 @@ namespace SPMS.Models
         [Required, MaxLength(500)]
         public string ProfilePicturePath { get; set; } = string.Empty;
 
+        public string? DocumentPath { get; set; }
+
         public bool IsActive { get; set; }
 
         public bool? IsDeleted { get; set; }
