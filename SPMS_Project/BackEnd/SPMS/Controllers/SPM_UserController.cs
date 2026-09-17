@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -18,12 +19,14 @@ namespace SPMS.Controllers
     public class SPM_UserController : ControllerBase
     {
         private readonly SpmDbContext _context;
-        private readonly FileService _fileService;
+        private readonly IFileService _fileService;
+        private readonly IValidator<UserDto> _validator;
         private readonly TokenService _tokenService;
 
-        public SPM_UserController(SpmDbContext context, TokenService tokenService, FileService fileService)
+        public SPM_UserController(SpmDbContext context, IValidator<UserDto> validator, TokenService tokenService, IFileService fileService)
         {
             _context = context;
+            _validator = validator;
             _fileService = fileService;
             _tokenService = tokenService;
         }
@@ -34,7 +37,7 @@ namespace SPMS.Controllers
         {
             try
             {
-                var user = await _context.Users.SingleOrDefaultAsync(u => u.Email == dto.Email && u.Password == dto.Password);
+                var user = await _context.Users.Include(u => u.UserType).SingleOrDefaultAsync(u => u.Email == dto.Email && u.Password == dto.Password);
 
                 if (user == null)
                 {
@@ -73,9 +76,9 @@ namespace SPMS.Controllers
             }
         }
 
-        [AllowAnonymous]
+        [Authorize(Roles = "Admin")]
         [HttpGet]
-        public async Task<IActionResult> GetUsers()
+        public async Task<IActionResult> GetAllForAdmin()
         {
             var users = await _context.Users.Include(u => u.UserType).Select(u => new UserDto
             {
@@ -142,6 +145,26 @@ namespace SPMS.Controllers
         {
             try
             {
+                var result = await _validator.ValidateAsync(user);
+
+                if (!result.IsValid)
+                {
+                    return BadRequest(new ApiResponse<Object>
+                    {
+                        Success = false,
+                        Message = "Validation Failed",
+                        Data = null,
+                        //Errors = result.Errors
+                        //.Select(x => $"{x.PropertyName}: {x.ErrorMessage}")
+                        //.ToList()
+
+                        Errors = result.Errors
+                        .GroupBy(x => x.PropertyName)
+                        .Select(x => $"{x.Key}: {string.Join(", ", x.Select(e => e.ErrorMessage))}")
+                        .ToList()
+                    });
+                }
+
                 if (user == null)
                 {
                     return BadRequest(new ApiResponse<object>
@@ -195,6 +218,26 @@ namespace SPMS.Controllers
         {
             try
             {
+                var result = await _validator.ValidateAsync(user);
+
+                if (!result.IsValid)
+                {
+                    return BadRequest(new ApiResponse<Object>
+                    {
+                        Success = false,
+                        Message = "Validation Failed",
+                        Data = null,
+                        //Errors = result.Errors
+                        //.Select(x => $"{x.PropertyName}: {x.ErrorMessage}")
+                        //.ToList()
+
+                        Errors = result.Errors
+                        .GroupBy(x => x.PropertyName)
+                        .Select(x => $"{x.Key}: {string.Join(", ", x.Select(e => e.ErrorMessage))}")
+                        .ToList()
+                    });
+                }
+
                 if (id != user.UserID)
                     return BadRequest(new ApiResponse<Object>
                     {
@@ -286,8 +329,21 @@ namespace SPMS.Controllers
         public async Task<IActionResult> CreateFile([FromForm] UserDTO dto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            {
+                // Extract errors as a flat List<string>
+                var errorList = ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage)
+                    .ToList();
 
+                return BadRequest(new ApiResponse<string>
+                {
+                    Success = false,
+                    Message = "Validation failed.",
+                    Errors = errorList
+                });
+            }
+                
             string? uploadedPath = null;
             if (dto.DocumentFile != null)
             {
@@ -304,7 +360,12 @@ namespace SPMS.Controllers
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
 
-            return Ok(user);
+            return Ok(new ApiResponse<SPM_User>
+            {
+                Success = true,
+                Message = "File Uploaded Successfully",
+                Data = user,
+            });
         }
 
         [HttpPut("{id:int}")]
@@ -312,11 +373,21 @@ namespace SPMS.Controllers
         public async Task<IActionResult> UpdateFile(int id, [FromForm] UserDTO dto)
         {
             if (id != dto.UserId)
-                return BadRequest("ID mismatch.");
+                return BadRequest(new ApiResponse<Object>
+                {
+                    Success = false,
+                    Message = "User ID Mismatch",
+                    Errors = new List<string> { $"UserID does not match with Given Id {id}" }
+                });
 
             var existingUser = await _context.Users.FindAsync(id);
             if (existingUser == null)
-                return NotFound("User not found.");
+                return NotFound(new ApiResponse<object>
+                {
+                    Success = false,
+                    Message = "User Not Found",
+                    Errors = new List<string> { $"No User found with Id {id}" }
+                });
 
             if (dto.DocumentFile != null && dto.DocumentFile.Length > 0)
             {
@@ -336,7 +407,12 @@ namespace SPMS.Controllers
             _context.Users.Update(existingUser);
             await _context.SaveChangesAsync();
 
-            return Ok(existingUser);
+            return Ok(new ApiResponse<SPM_User>
+            {
+                Success = true,
+                Message = "File Updated Successfully",
+                Data = existingUser
+            });
         }
 
         [HttpDelete("{id:int}")]
@@ -344,18 +420,32 @@ namespace SPMS.Controllers
         {
             var user = await _context.Users.FindAsync(id);
             if (user == null)
-                return NotFound("User not found.");
+                return NotFound(new ApiResponse<object>
+                {
+                    Success = false,
+                    Message = "User Not Found",
+                    Errors = new List<string> { $"No User found with Id {id}" }
+                });
 
             if (deleteFileOnly)
             {
                 if (string.IsNullOrEmpty(user.DocumentPath))
-                    return BadRequest("No document exists for this user.");
+                    return BadRequest(new ApiResponse<Object>
+                    {
+                        Success = false,
+                        Message = "File Not Found.",
+                        Errors = new List<string> { $"No Such File Exist For This User." }
+                    });
 
                 _fileService.DeleteFile(user.DocumentPath);
                 user.DocumentPath = null;
                 await _context.SaveChangesAsync();
 
-                return Ok("Document deleted successfully.");
+                return Ok(new ApiResponse<SPM_User>
+                {
+                    Success = true,
+                    Message = "File Deleted Successfully"
+                });
             }
 
             // Delete both physical file and DB record
@@ -363,7 +453,11 @@ namespace SPMS.Controllers
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok(new ApiResponse<Object>
+            {
+                Success = true,
+                Message = "User And File Both Deleted Successfully"
+            });
         }
     }
 }

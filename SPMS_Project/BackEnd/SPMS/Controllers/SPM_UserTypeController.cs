@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SPMS.Data;
+using SPMS.DTO.Role;
 using SPMS.DTO.UserType;
 using SPMS.Models;
 
@@ -12,10 +14,12 @@ namespace SPMS.Controllers
     public class SPM_UserTypeController : ControllerBase
     {
         private readonly SpmDbContext _context;
+        private readonly IValidator<UserTypeDto> _validator;
 
-        public SPM_UserTypeController(SpmDbContext context)
+        public SPM_UserTypeController(SpmDbContext context, IValidator<UserTypeDto> validator)
         {
             _context = context;
+            _validator = validator;
         }
 
         [HttpGet]
