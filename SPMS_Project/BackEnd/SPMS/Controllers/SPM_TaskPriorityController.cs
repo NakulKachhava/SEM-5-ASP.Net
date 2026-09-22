@@ -48,7 +48,7 @@ namespace SPMS.Controllers
         public async Task<IActionResult> GetTaskPriority([FromRoute] int id)
         {
             var priority =
-                await _context.TaskPriorities.FindAsync(id);
+                await _context.TaskPriorities.AsNoTracking().FirstOrDefaultAsync(x => x.TaskPriorityID == id);
 
             if (priority == null)
             {

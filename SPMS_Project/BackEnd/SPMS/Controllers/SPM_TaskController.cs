@@ -63,7 +63,7 @@ namespace SPMS.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetTask([FromRoute] int id)
         {
-            var task = await _context.Tasks.FindAsync(id);
+            var task = await _context.Tasks.AsNoTracking().FirstOrDefaultAsync(x => x.TaskID == id);
 
             if (task == null)
             {

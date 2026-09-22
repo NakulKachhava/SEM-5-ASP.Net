@@ -42,7 +42,7 @@ namespace SPMS.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetRole([FromRoute] int id)
         {
-            var role = await _context.Roles.FindAsync(id);
+            var role = await _context.Roles.AsNoTracking().FirstOrDefaultAsync(x => x.RoleID == id);
 
             if (role == null)
             {
@@ -74,6 +74,16 @@ namespace SPMS.Controllers
         {
             try
             {
+                if (role == null)
+                {
+                    return BadRequest(new ApiResponse<object>
+                    {
+                        Success = false,
+                        Message = "Role Object Not Found",
+                        Errors = new List<string> { $"Given role object was not found." }
+                    });
+                }
+
                 var result = await _validator.ValidateAsync(role);
 
                 if (!result.IsValid)
@@ -94,16 +104,6 @@ namespace SPMS.Controllers
                     });
                 }
 
-                if (role == null)
-                {
-                    return BadRequest(new ApiResponse<object>
-                    {
-                        Success = false,
-                        Message = "Role Object Not Found",
-                        Errors = new List<string> { $"Given role object was not found." }
-                    });
-                }
-
                 var roles = new SPM_Role()
                 {
                     RoleName = role.RoleName,
@@ -112,6 +112,8 @@ namespace SPMS.Controllers
 
                 await _context.Roles.AddAsync(roles);
                 await _context.SaveChangesAsync();
+
+                role.RoleID = roles.RoleID;
 
                 return Ok(new ApiResponse<RoleDto>
                 {
@@ -140,6 +142,16 @@ namespace SPMS.Controllers
         {
             try
             {
+                if (role == null)
+                {
+                    return BadRequest(new ApiResponse<object>
+                    {
+                        Success = false,
+                        Message = "Role Object Not Found",
+                        Errors = new List<string> { $"Given role object was not found." }
+                    });
+                }
+
                 var result = await _validator.ValidateAsync(role);
 
                 if (!result.IsValid)
@@ -231,7 +243,7 @@ namespace SPMS.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new ApiResponse<object>
+                return BadRequest(new ApiResponse<Object>
                 {
                     Success = false,
                     Message = "Error occurred while deleting role",

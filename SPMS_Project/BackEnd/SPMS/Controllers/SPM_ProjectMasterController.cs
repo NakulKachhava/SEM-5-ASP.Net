@@ -47,7 +47,7 @@ namespace SPMS.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetProject([FromRoute] int id)
         {
-            var project = await _context.ProjectMasters.FindAsync(id);
+            var project = await _context.ProjectMasters.AsNoTracking().FirstOrDefaultAsync(x => x.ProjectID == id);
 
             if (project == null)
             {

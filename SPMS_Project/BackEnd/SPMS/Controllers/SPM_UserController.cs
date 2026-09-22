@@ -63,7 +63,7 @@ namespace SPMS.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new ApiResponse<Object>
+                return StatusCode(500, new ApiResponse<object>
                 {
                     Success = false,
                     Message = "Error occurred while logging in the user.",
@@ -105,7 +105,7 @@ namespace SPMS.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetUser([FromRoute] int id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = await _context.Users.AsNoTracking().FirstOrDefaultAsync(x => x.UserID == id);
 
             if (user == null)
             {
@@ -145,11 +145,21 @@ namespace SPMS.Controllers
         {
             try
             {
+                if (user == null)
+                {
+                    return BadRequest(new ApiResponse<object>
+                    {
+                        Success = false,
+                        Message = "User Object Not Found",
+                        Errors = new List<string> { $"Given user object was not found." }
+                    });
+                }
+
                 var result = await _validator.ValidateAsync(user);
 
                 if (!result.IsValid)
                 {
-                    return BadRequest(new ApiResponse<Object>
+                    return BadRequest(new ApiResponse<object>
                     {
                         Success = false,
                         Message = "Validation Failed",
@@ -162,16 +172,6 @@ namespace SPMS.Controllers
                         .GroupBy(x => x.PropertyName)
                         .Select(x => $"{x.Key}: {string.Join(", ", x.Select(e => e.ErrorMessage))}")
                         .ToList()
-                    });
-                }
-
-                if (user == null)
-                {
-                    return BadRequest(new ApiResponse<object>
-                    {
-                        Success = false,
-                        Message = "User Object Not Found",
-                        Errors = new List<string> { $"Given user object was not found." }
                     });
                 }
 
@@ -191,6 +191,8 @@ namespace SPMS.Controllers
                 await _context.Users.AddAsync(users);
                 await _context.SaveChangesAsync();
 
+                user.UserID = users.UserID;
+
                 return Ok(new ApiResponse<UserDto>
                 {
                     Success = true,
@@ -200,7 +202,7 @@ namespace SPMS.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new ApiResponse<Object>
+                return BadRequest(new ApiResponse<object>
                 {
                     Success = false,
                     Message = "Error occurred while adding user",
@@ -218,11 +220,21 @@ namespace SPMS.Controllers
         {
             try
             {
+                if (user == null)
+                {
+                    return BadRequest(new ApiResponse<object>
+                    {
+                        Success = false,
+                        Message = "User Object Not Found",
+                        Errors = new List<string> { $"Given user object was not found." }
+                    });
+                }
+
                 var result = await _validator.ValidateAsync(user);
 
                 if (!result.IsValid)
                 {
-                    return BadRequest(new ApiResponse<Object>
+                    return BadRequest(new ApiResponse<object>
                     {
                         Success = false,
                         Message = "Validation Failed",
@@ -239,7 +251,7 @@ namespace SPMS.Controllers
                 }
 
                 if (id != user.UserID)
-                    return BadRequest(new ApiResponse<Object>
+                    return BadRequest(new ApiResponse<object>
                     {
                         Success = false,
                         Message = "User ID Mismatch",
@@ -276,7 +288,7 @@ namespace SPMS.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new ApiResponse<Object>
+                return BadRequest(new ApiResponse<object>
                 {
                     Success = false,
                     Message = "Error occurred while updating user",
@@ -373,7 +385,7 @@ namespace SPMS.Controllers
         public async Task<IActionResult> UpdateFile(int id, [FromForm] UserDTO dto)
         {
             if (id != dto.UserId)
-                return BadRequest(new ApiResponse<Object>
+                return BadRequest(new ApiResponse<object>
                 {
                     Success = false,
                     Message = "User ID Mismatch",
@@ -430,7 +442,7 @@ namespace SPMS.Controllers
             if (deleteFileOnly)
             {
                 if (string.IsNullOrEmpty(user.DocumentPath))
-                    return BadRequest(new ApiResponse<Object>
+                    return BadRequest(new ApiResponse<object>
                     {
                         Success = false,
                         Message = "File Not Found.",
@@ -453,7 +465,7 @@ namespace SPMS.Controllers
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
 
-            return Ok(new ApiResponse<Object>
+            return Ok(new ApiResponse<object>
             {
                 Success = true,
                 Message = "User And File Both Deleted Successfully"
