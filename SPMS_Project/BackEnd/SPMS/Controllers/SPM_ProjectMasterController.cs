@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SPMS.Common;
@@ -10,6 +11,7 @@ namespace SPMS.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
+    [Authorize(Roles = "Admin,Faculty")]
     public class SPM_ProjectMasterController : ControllerBase
     {
         private readonly SpmDbContext _context;

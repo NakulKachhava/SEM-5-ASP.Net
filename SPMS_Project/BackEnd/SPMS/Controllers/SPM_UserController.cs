@@ -15,7 +15,7 @@ namespace SPMS.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class SPM_UserController : ControllerBase
     {
         private readonly SpmDbContext _context;
@@ -76,30 +76,141 @@ namespace SPMS.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin")]
+        [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> GetAllForAdmin()
+        public async Task<IActionResult> GetAll(
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 10,
+            [FromQuery] string? fullName = null,
+            [FromQuery] string? userCode = null,
+            [FromQuery] string? email = null,
+            [FromQuery] int? userTypeId = null,
+            [FromQuery] bool? isActive = null,
+            [FromQuery] bool? isDeleted = null)
         {
-            var users = await _context.Users.Include(u => u.UserType).Select(u => new UserDto
+            try
             {
-                UserID = u.UserID,
-                UserTypeID = u.UserTypeID,
-                UserTypeName = u.UserType != null ? u.UserType.UserTypeName : "No Department",
-                FullName = u.FullName,
-                UserCode = u.UserCode,
-                Email = u.Email,
-                Password = u.Password,
-                MobileNumber = u.MobileNumber,
-                ProfilePicturePath = u.ProfilePicturePath,
-                IsActive = u.IsActive,
-                IsDeleted = u.IsDeleted,
-            }).AsNoTracking().ToListAsync();
-            return Ok(new ApiResponse<List<UserDto>>
+                // Validate pagination parameters
+                if (pageNumber < 1)
+                {
+                    pageNumber = 1;
+                }
+
+                if (pageSize < 1)
+                {
+                    pageSize = 10;
+                }
+
+                // Optional maximum page size
+                if (pageSize > 100)
+                {
+                    pageSize = 100;
+                }
+
+                // Start query
+                var query = _context.Users
+                    .Include(u => u.UserType)
+                    .AsNoTracking()
+                    .AsQueryable();
+
+                // Filtering
+                if (!string.IsNullOrWhiteSpace(fullName))
+                {
+                    query = query.Where(u =>
+                        u.FullName != null &&
+                        u.FullName.Contains(fullName));
+                }
+
+                if (!string.IsNullOrWhiteSpace(userCode))
+                {
+                    query = query.Where(u =>
+                        u.UserCode != null &&
+                        u.UserCode.Contains(userCode));
+                }
+
+                if (!string.IsNullOrWhiteSpace(email))
+                {
+                    query = query.Where(u =>
+                        u.Email != null &&
+                        u.Email.Contains(email));
+                }
+
+                if (userTypeId.HasValue)
+                {
+                    query = query.Where(u =>
+                        u.UserTypeID == userTypeId.Value);
+                }
+
+                if (isActive.HasValue)
+                {
+                    query = query.Where(u =>
+                        u.IsActive == isActive.Value);
+                }
+
+                if (isDeleted.HasValue)
+                {
+                    query = query.Where(u =>
+                        u.IsDeleted == isDeleted.Value);
+                }
+
+                // Get total records BEFORE pagination
+                var totalRecords = await query.CountAsync();
+
+                // Calculate total pages
+                var totalPages = (int)Math.Ceiling(
+                    totalRecords / (double)pageSize);
+
+                // Pagination
+                var users = await query
+                    .OrderBy(u => u.UserID)
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .Select(u => new UserDto
+                    {
+                        UserID = u.UserID,
+                        UserTypeID = u.UserTypeID,
+                        UserTypeName = u.UserType != null
+                            ? u.UserType.UserTypeName
+                            : "No Department",
+                        FullName = u.FullName,
+                        UserCode = u.UserCode,
+                        Email = u.Email,
+                        MobileNumber = u.MobileNumber,
+                        ProfilePicturePath = u.ProfilePicturePath,
+                        IsActive = u.IsActive,
+                        IsDeleted = u.IsDeleted,
+                    })
+                    .ToListAsync();
+
+                var response = new PaginatedResponse<UserDto>
+                {
+                    Items = users,
+                    PageNumber = pageNumber,
+                    PageSize = pageSize,
+                    TotalRecords = totalRecords,
+                    TotalPages = totalPages
+                };
+
+                return Ok(new ApiResponse<PaginatedResponse<UserDto>>
+                {
+                    Success = true,
+                    Message = "Users Retrieved Successfully",
+                    Data = response
+                });
+            }
+            catch (Exception ex)
             {
-                Success = true,
-                Message = "Users Retrieved Successfully",
-                Data = users,
-            });
+                return StatusCode(500, new ApiResponse<object>
+                {
+                    Success = false,
+                    Message = "Error occurred while retrieving users.",
+                    Errors = new List<string>
+                    {
+                        ex.Message,
+                        ex.InnerException?.Message ?? "No Inner Exception"
+                    }
+                });
+            }
         }
 
         [HttpGet("{id:int}")]
@@ -124,7 +235,6 @@ namespace SPMS.Controllers
                 FullName = user.FullName,
                 UserCode = user.UserCode,
                 Email = user.Email,
-                Password = user.Password,
                 MobileNumber = user.MobileNumber,
                 ProfilePicturePath = user.ProfilePicturePath,
                 IsActive = user.IsActive,

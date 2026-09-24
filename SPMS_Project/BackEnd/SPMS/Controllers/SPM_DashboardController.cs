@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SPMS.Data;
 using SPMS.Models;
@@ -7,6 +8,7 @@ namespace StudentProjectManagementApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin,Faculty,Student")]
     public class SPM_DashboardController : ControllerBase
     {
         private readonly SpmDbContext _context;
